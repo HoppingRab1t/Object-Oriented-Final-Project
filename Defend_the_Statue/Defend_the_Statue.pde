@@ -2,52 +2,41 @@
 
 
 boolean gamePlay = false;
-int difficulty;
+int difficultyMode = 0;
+
+
+Start_menu_buttons[] buttons = new Start_menu_buttons[3];
 void setup() {
   size(800, 800);
   rectMode(CENTER);
+
+  for  (int i = 0; i < buttons.length; i+=1) {
+    buttons[i] = new Start_menu_buttons(i*250);
+  }
 }
 
 
 //ArrayList <float>  Size = new ArrayList<>();
 
-
+int brightness = 0;
 void draw() {
+
+  noStroke();
   background(255);
-  fill(0);
   textSize(29);
-  text("qwdqwdqwdqw \nqwdqwdqdw", 200, 200);
+  for  (int i = 0; i < buttons.length; i+=1) {
+    buttons[i].display();
+    difficultyMode = buttons[i].difficulty;
+    //print(difficultyMode);
 
-
-  if (gamePlay == false) {
-    //draw the different difficulty selections
-
-    if (mousePressed) {
-      if (50 <= mouseX && mouseX <= 350) {
-        
-      } else {
-        
-      }
-      rect(150, 650, 200, 200);
-
-      if (300 <= mouseX && mouseX <= 500) {
-        
-      } else {
-        
-      }
-      rect(400, 650, 200, 200);
-
-      if (550 <= mouseX && mouseX <= 750) {
-        
-      } else {
-        
-      }
-      rect(650, 650, 200, 200);
-
-
-
-      rect(400, 450, 700, 5);
+    if  (!(difficultyMode == 0)) {
+      gamePlay = true;
     }
+  }
+  if  (gamePlay == true) {
+    brightness += 10 ;
+    fill(0,0,0,brightness);
+    rect(400, 400, 800, 800);
   }
 }
 
