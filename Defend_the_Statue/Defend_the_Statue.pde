@@ -10,8 +10,15 @@ PVector PlayerVol = new PVector(0, 0);
 
 //Map coords
 PVector CenterPos = new PVector(0, 0);
+//Camera
+int cameraShake;
+PVector ShakeOffset = new PVector(0, 0);
 
 Start_menu_buttons[] buttons = new Start_menu_buttons[3];
+
+
+ArrayList <Bullets> bullets = new  ArrayList<Bullets>();
+
 void setup() {
   size(800, 800);
   rectMode(CENTER);
@@ -23,7 +30,7 @@ void setup() {
 
 
 //ArrayList <float>  Size = new ArrayList<>();
-
+int delay;
 int brightness = 0;
 void draw() {
 
@@ -86,22 +93,51 @@ void draw() {
     } else {
       PlayerVol.add((0-PlayerVol.x)/20, 0);
     }
-    
-    if (!(keyPressed)) {
-      PlayerVol.add((0-PlayerVol.x)/20, 0);
-      PlayerVol.add(0,(0-PlayerVol.y)/20);
-      
-         
-    } 
-    
-    
-    
-CenterPos.sub(PlayerVol);
 
+    if (!(keyPressed) || keySpace == true) {
+      PlayerVol.add((0-PlayerVol.x)/20, 0);
+      PlayerVol.add(0, (0-PlayerVol.y)/20);
+    }
+      pushMatrix();
+
+    translate(-1*ShakeOffset.x,-1*ShakeOffset.y);
+    
+    delay += 1;
+    if (keySpace == true || mousePressed) {
+      if (delay >= 5){
+      
+      
+      bullets.add(new Bullets());
+      delay = 0;
+      }
+      if (delay <= 5){
+        cameraShake = 5;
+
+      ShakeOffset.x = (random(-1*cameraShake, cameraShake));
+      ShakeOffset.y = (random(-1*cameraShake, cameraShake));
+      }
+      
+    } else{
+      ShakeOffset.x = 0;
+    ShakeOffset.y = 0;
+    }
+
+    //drawbullets
+    for (Bullets b: bullets){
+      b.display();
+    }
+    //print(bullets.size());
+    CenterPos.sub(PlayerVol);
+    translate(ShakeOffset.x,ShakeOffset.y);
     //draw player
     fill(0);
-    ellipse(400+PlayerVol.x, 400+PlayerVol.y, 50, 50);
-    rect(CenterPos.x +400 ,CenterPos.y + 400,100,100);
+    ellipse(400+PlayerVol.x , 400+PlayerVol.y , 50, 50);
+    rect(400 + CenterPos.x, 400+ CenterPos.y, 100, 100);
+    
+    
+    
+    
+  popMatrix();
   }
 }
 
@@ -113,6 +149,7 @@ boolean keyA;
 boolean keyD;
 boolean keyW;
 boolean keyS;
+boolean keySpace;
 void keyPressed() {
   if (key == 'a') {
     keyA = true;
@@ -125,6 +162,9 @@ void keyPressed() {
   }
   if (key == 's') {
     keyS = true;
+  }
+  if (key == ' ') {
+    keySpace = true;
   }
 }
 
@@ -140,5 +180,8 @@ void keyReleased() {
   }
   if (key == 's') {
     keyS = false;
+  }
+  if (key == ' ') {
+    keySpace = false;
   }
 }
