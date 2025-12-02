@@ -1,6 +1,7 @@
 // \n
 import java.awt.Rectangle;
 
+
 boolean gamePlay = false;
 int difficultyMode = 0;
 
@@ -20,14 +21,19 @@ Start_menu_buttons[] buttons = new Start_menu_buttons[3];
 ArrayList <Bullets> bullets = new  ArrayList<Bullets>();
 ArrayList <Zombie> zombie = new ArrayList<Zombie>();
 
+//important variables
 int damage = 1;
 int points = 0;
+int statueHP = 100;
+int wave = 0;
+int money =0;
 
+Rectangle StatueHitbox;
 
 void setup() {
   size(800, 800);
   rectMode(CENTER);
-
+  noCursor();
   for  (int i = 0; i < buttons.length; i+=1) {
     buttons[i] = new Start_menu_buttons(i*250);
   }
@@ -43,7 +49,8 @@ int brightness = 0;
 
 float recoil = 0;
 
-PVector textPos = new PVector (10,0);
+PVector textPos = new PVector (10, 0);
+String text= "22220 \r eedwd";
 void draw() {
 
   noStroke();
@@ -51,12 +58,14 @@ void draw() {
   textSize(29);
   fill(0);
   //proof of concept
-  text("22220 \r eedwd" + recoil, 200, 200, 100, 100);
+
+  //test where the hit box is at
+  //fill(200,200,200,200);
+  //rect(StatueHitbox.x,StatueHitbox.y,StatueHitbox.width,StatueHitbox.height);
 
   //Main menu and displaying it
   if  (gamePlay == true) {
     brightness += 10 ;
-
     if (brightness <=  555) {
       fill(0, 0, 0, brightness);
       rect(400, 400, 800, 800);
@@ -70,8 +79,10 @@ void draw() {
       difficultyMode = buttons[i].difficulty;
       //print(difficultyMode);
 
-      if  (!(difficultyMode == 0)) {
+      if  (!(difficultyMode == 0 || brightness >= 555)) {
         gamePlay = true;
+        print("STOP");
+        break;
       }
     }
   }
@@ -108,6 +119,10 @@ void draw() {
       PlayerVol.add(0, (0-PlayerVol.y)/20);
     }
 
+    //remove later
+    //if (keyD == true && keyA == true) {
+    //  statueHP-=10;
+    //}
 
 
     pushMatrix();
@@ -118,22 +133,28 @@ void draw() {
 
     if (zombieDelay >= zombieSetDelay) {
       zombieDelay = 0;
-      zombie.add(new Zombie());
+      zombie.add(new Zombie(int(random(1, 4))));
       //
 
       //println("poop");
     }
 
     if (keySpace == true || mousePressed) {
-      if (delay >= 5) {
+      if (delay >= 30) {
+
+        damage = 5;
+        recoil += 15;
         bullets.add(new Bullets());
-        recoil += 5;
+
+        //shot gun mode
+        bullets.add(new Bullets());
+        bullets.add(new Bullets());
+        bullets.add(new Bullets());
+
         delay = 0;
       }
       if (delay <= 5) {
-        cameraShake = int(recoil/2);
-        ShakeOffset.x = (random(-1*cameraShake, cameraShake));
-        ShakeOffset.y = (random(-1*cameraShake, cameraShake));
+        cameraShake = int(recoil/4);
       }
     } else {
       ShakeOffset.x = 0;
@@ -142,6 +163,9 @@ void draw() {
 
 
     //draw instances
+    fill(200);
+    StatueHitbox = new Rectangle(int(400+ CenterPos.x), int(400+ CenterPos.y), 100, 100);
+    rect(StatueHitbox.x, StatueHitbox.y, StatueHitbox.width, StatueHitbox.height);
 
 
 
@@ -150,13 +174,19 @@ void draw() {
     for (int i = bullets.size()-1; i >= 0; i -=1) {
       Bullets b = bullets.get(i);
       b.display();
-      if ( b.delay >5000 ){
+      if ( b.delay >5000 ) {
         bullets.remove(i);
       }
     }
+
+
     for (int d = zombie.size()-1; d >= 0; d-=1) {
       Zombie z = zombie.get(d);
       z.display();
+      if (StatueHitbox.contains(z.pos.x, z.pos.y)) {
+        z.statueAttack();
+        //println("why it not wortk");
+      }
     }
     for (int i = bullets.size()-1; i >= 0; i -=1) {
       Bullets b = bullets.get(i);
@@ -166,21 +196,29 @@ void draw() {
         if (z.hitbox.contains(b.pos.x, b.pos.y)) {
           bullets.remove(i);
           z.hit(damage);
+          points += 10;
           stroke(0);
           strokeWeight(2);
+
+          //draw damaged indicated crosshair
           line (mouseX-10, mouseY-10, mouseX-20, mouseY-20);
           line (mouseX+10, mouseY-10, mouseX+20, mouseY-20);
           line (mouseX-10, mouseY+10, mouseX-20, mouseY+20);
           line (mouseX+10, mouseY+10, mouseX+20, mouseY+20);
           if (z.HP <= 0) {
             println("dead");
+            cameraShake += 10;
+
             zombie.remove(d);
           }
           break;
         }
       }
     }
-
+    if (delay <= 5) {
+      ShakeOffset.x = (random(-1*cameraShake, cameraShake));
+      ShakeOffset.y = (random(-1*cameraShake, cameraShake));
+    }
     //print(bullets.size());
     CenterPos.sub(PlayerVol);
     translate(ShakeOffset.x, ShakeOffset.y);
@@ -188,7 +226,6 @@ void draw() {
     noStroke();
     fill(0);
     ellipse(400+PlayerVol.x, 400+PlayerVol.y, 50, 50);
-    rect(400 + CenterPos.x, 400+ CenterPos.y, 100, 100);
 
     popMatrix();
     fill(0);
@@ -199,7 +236,6 @@ void draw() {
       recoil = 0;
     }
 
-    ellipse(mouseX, mouseY, 5, 5);
     rect(mouseX +10 + recoil*3, mouseY, 2, 10);
     rect(mouseX +15 + recoil*3, mouseY, 30, 2);
 
@@ -211,7 +247,54 @@ void draw() {
 
     rect(mouseX, mouseY +15 + recoil*3, 2, 30);
     rect(mouseX, mouseY +10 + recoil*3, 10, 2);
+
+    textSize(15);
+    fill(0);
+    rectMode(CORNER);
+
+    text ("Points: "+points+
+      "               Money: "+money +
+      "               Statue HP: " +statueHP+
+      "               Wave: "+wave,
+      100, 750, 600, 200);
+
+    rectMode(CENTER);
+
+    if (statueHP <= 0) {
+
+      //statueHP = 0;
+      for (int i = bullets.size()-1; i >= 0; i -=1) {
+        bullets.remove(i);
+      }
+      for (int d = zombie.size()-1; d >= 0; d-=1) {
+        zombie.remove(d);
+      }
+
+      //reset stuff
+      gamePlay = false;
+      brightness = 0;
+      print(difficultyMode);
+      statueHP =100;
+      difficultyMode = 0;
+
+      println("Game over man... GAME OVER");
+    }
+    if (statueHP <= 20 ) {
+      textPos = new PVector(350, 200);
+      text = "LOW HP";
+    } else {
+      textPos = new PVector(350, 200);
+      text = "";
+    }
   }
+  rectMode(CORNER);
+  fill(0);
+  textSize(40);
+
+  text(text, textPos.x, textPos.y, 500, 300);
+  rectMode(CENTER);
+  fill(255);
+  ellipse(mouseX, mouseY, 5, 5);
 }
 
 void mousePressed() {
@@ -224,16 +307,16 @@ boolean keyW;
 boolean keyS;
 boolean keySpace;
 void keyPressed() {
-  if (key == 'a') {
+  if (key == 'a' || key == 'A') {
     keyA = true;
   }
-  if (key == 'd') {
+  if (key == 'd' || key == 'D') {
     keyD = true;
   }
-  if (key == 'w') {
+  if (key == 'w' || key == 'W') {
     keyW = true;
   }
-  if (key == 's') {
+  if (key == 's'|| key == 'S') {
     keyS = true;
   }
   if (key == ' ') {

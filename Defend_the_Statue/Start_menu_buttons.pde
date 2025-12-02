@@ -1,6 +1,6 @@
 
 class Start_menu_buttons {
-  int brightness=0;
+  int brightness1=0;
   int offset;
   int difficulty = 0;
   
@@ -12,18 +12,24 @@ class Start_menu_buttons {
     //off set should be 250
     if (gamePlay == false) {
       //draw the different difficulty selections
+      if (brightness >= 0){
+        difficulty = 0;
+      }
       if (50 +(offset) <= mouseX && mouseX <= 250 +(offset) && mouseY<=750 && mouseY >= 550) {
         if (mousePressed) {
-          brightness = 200;
+          brightness1 = 200;
           difficulty = offset/250 +1;
+          
 
         }
-        brightness += ((150 - brightness)/5);
+        brightness1 += ((150 - brightness1)/5);
       } else {
-        brightness += ((0 - brightness)/5);
+        brightness1 += ((0 - brightness1)/5);
+        
       }
+      
     }
-    fill(brightness);
+    fill(brightness1);
     rect(150 + offset, 650, 200, 200);
   }
   
