@@ -16,6 +16,7 @@ int cameraShake;
 PVector ShakeOffset = new PVector(0, 0);
 
 Start_menu_buttons[] buttons = new Start_menu_buttons[3];
+Borders[] borders = new Borders[4];
 
 
 ArrayList <Bullets> bullets = new  ArrayList<Bullets>();
@@ -29,6 +30,7 @@ int wave = 0;
 int money =0;
 
 Rectangle StatueHitbox;
+Rectangle PlayerHitbox;
 
 void setup() {
   size(800, 800);
@@ -36,6 +38,9 @@ void setup() {
   noCursor();
   for  (int i = 0; i < buttons.length; i+=1) {
     buttons[i] = new Start_menu_buttons(i*250);
+  }
+  for  (int i = 0; i < borders.length; i+=1) {
+    borders[i] = new Borders(i);
   }
 }
 
@@ -139,17 +144,18 @@ void draw() {
       //println("poop");
     }
 
-    if (keySpace == true || mousePressed) {
-      if (delay >= 30) {
 
-        damage = 5;
-        recoil += 15;
+    if (keySpace == true || mousePressed) {
+      if (delay >= 2) {
+
+        damage = 1;
+        recoil += 5;
         bullets.add(new Bullets());
 
         //shot gun mode
-        bullets.add(new Bullets());
-        bullets.add(new Bullets());
-        bullets.add(new Bullets());
+        //bullets.add(new Bullets());
+        //bullets.add(new Bullets());
+        //bullets.add(new Bullets());
 
         delay = 0;
       }
@@ -164,11 +170,26 @@ void draw() {
 
     //draw instances
     fill(200);
-    StatueHitbox = new Rectangle(int(400+ CenterPos.x), int(400+ CenterPos.y), 100, 100);
+    StatueHitbox = new Rectangle(int(350+ CenterPos.x), int(200+ CenterPos.y), 100, 100);
+    rectMode(CORNER);
     rect(StatueHitbox.x, StatueHitbox.y, StatueHitbox.width, StatueHitbox.height);
 
+    PlayerHitbox = new Rectangle(int (400 + PlayerVol.x) - 25, int (400 + PlayerVol.y)- 25, 50, 50);
+    if (StatueHitbox.intersects(PlayerHitbox)) {
+      PlayerVol.sub(PlayerVol);
+      print("pop");
+    }
+    rectMode(CENTER);
+    for  (int i = 0; i < borders.length; i+=1) {
+      //add stuff
+      println(i);
+            borders[i].display();
 
+      if (borders[i].Borders.intersects(PlayerHitbox)) {
+        PlayerVol.sub(PlayerVol);
+      }
 
+    }
 
 
     for (int i = bullets.size()-1; i >= 0; i -=1) {
@@ -260,6 +281,8 @@ void draw() {
 
     rectMode(CENTER);
 
+
+
     if (statueHP <= 0) {
 
       //statueHP = 0;
@@ -269,6 +292,7 @@ void draw() {
       for (int d = zombie.size()-1; d >= 0; d-=1) {
         zombie.remove(d);
       }
+
 
       //reset stuff
       gamePlay = false;

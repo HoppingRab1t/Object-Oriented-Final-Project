@@ -9,11 +9,11 @@ class Zombie {
   int zdamage;
   int pointAmount;
   int moneyAmount;
-  int speed;
+  float speed;
 
   PVector colour = new PVector(0, 0, 0);
 
-  PVector dif = new PVector(400 + random(-50, 50), 400 + random(-50, 50));
+  PVector dif = new PVector(StatueHitbox.x - CenterPos.x +StatueHitbox.width/2+ random(-50, 50), StatueHitbox.y - CenterPos.y +StatueHitbox.height/2+ random(-50, 50));
   int vari = 1;
   float ratio = int (random(1, 3));
 
@@ -29,13 +29,13 @@ class Zombie {
     variant = vari;
 
     if (difficultyMode == 1) {
-      pos = new PVector (random(0, 800), -1000);
+      pos = new PVector (random(0, 800)+ CenterPos.x, -2000 + CenterPos.y);
     }
     if (difficultyMode == 2) {
-      pos = new PVector (random(0, 800), -1000);
+      pos = new PVector (random(0, 800)+ CenterPos.x, -1000 + CenterPos.y);
     }
     if (difficultyMode == 3) {
-      pos = new PVector (random(0, 800), -1000);
+      pos = new PVector (random(0, 800)+ CenterPos.x, -1000 + CenterPos.y);
     }
 
     //zombie stats
@@ -44,7 +44,7 @@ class Zombie {
       zdamage = 1;
       pointAmount= 100;
       moneyAmount = 10;
-      speed = 4;
+      speed = 1;
       colour = new PVector(135, 197, 69);
     }
     if (variant == 2 ) {
@@ -52,7 +52,7 @@ class Zombie {
       zdamage = 2;
       pointAmount= 250;
       moneyAmount = 30;
-      speed = 2;
+      speed = 0.5;
       colour = new PVector(145, 180, 56);
     }
     if (variant == 3 ) {
@@ -60,7 +60,7 @@ class Zombie {
       zdamage = 1;
       pointAmount= 150;
       moneyAmount = 15;
-      speed = 8;
+      speed = 2;
       colour = new PVector(56, 180, 145);
     }
   }
