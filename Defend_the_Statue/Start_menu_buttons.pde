@@ -1,5 +1,7 @@
 
 class Start_menu_buttons {
+  
+ //declaring variables
   int brightness1=0;
   int offset;
   int difficulty = 0;
@@ -9,19 +11,18 @@ class Start_menu_buttons {
   }
 
   void display() {
-    //off set should be 250
     if (gamePlay == false) {
-      //draw the different difficulty selections
+      //draw the different difficulty button selections
       if (brightness >= 0) {
         difficulty = 0;
       }
+      //checks if the mouse is touching it, also changes brightness if hovered or clicked
       if (50 +(offset) <= mouseX && mouseX <= 250 +(offset) && mouseY<=750 && mouseY >= 550) {
         if (mousePressed) {
           brightness1 = 200;
           difficulty = offset/250 +1;
-          //print(difficulty);
           for  (int i = 0; i < borders.length; i+=1) {
-            //add stuff
+            //add difficulty value to borders
             borders[i].diff(difficulty);
           }
         }
@@ -35,6 +36,7 @@ class Start_menu_buttons {
   }
 
   int difficulty() {
+    //returns the difficulty values;
     return difficulty;
   }
 }

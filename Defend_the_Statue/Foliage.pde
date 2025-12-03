@@ -1,9 +1,10 @@
 class Foliage {
+  //sets up the variables in order to draw the images
   PVector pos = new PVector (random(-2000, 2000), (random(-2000, 2000)));
   PImage img = loadImage("Bush_1.png");
-  float ran = random(5,10)
-;
+  float ran = random(8,10);
 
+//loads in the images
   Foliage() {
     if (int(random(1, 6))== 1) {
       img = loadImage("Bush_1.png");
@@ -23,7 +24,7 @@ class Foliage {
   }
 
   void display() {
-    //pos.sub(PlayerVol.x,PlayerVol.y);
+    //displays the image
     image (img,CenterPos.x+pos.x,CenterPos.y+pos.y,width/(ran),height/(ran));
   }
 }
