@@ -17,18 +17,21 @@ PVector ShakeOffset = new PVector(0, 0);
 
 Start_menu_buttons[] buttons = new Start_menu_buttons[3];
 Borders[] borders = new Borders[4];
-
+Foliage[] foliage = new Foliage[60];
 
 ArrayList <Bullets> bullets = new  ArrayList<Bullets>();
 ArrayList <Zombie> zombie = new ArrayList<Zombie>();
+ArrayList <Parti> parti = new ArrayList<Parti>();
+
 
 //important variables
 int damage = 1;
 int points = 0;
 int statueHP = 100;
-int wave = 0;
+int wave = 1;
 int money =0;
 
+int zombieCount = 100;
 Rectangle StatueHitbox;
 Rectangle PlayerHitbox;
 
@@ -42,6 +45,9 @@ void setup() {
   for  (int i = 0; i < borders.length; i+=1) {
     borders[i] = new Borders(i);
   }
+  for  (int i = 0; i < foliage.length; i+=1) {
+    foliage[i] = new Foliage();
+  }
 }
 
 
@@ -54,12 +60,13 @@ int brightness = 0;
 
 float recoil = 0;
 
-PVector textPos = new PVector (10, 0);
-String text= "22220 \r eedwd";
+PVector textPos = new PVector (50, 20);
+
+String text= "[   DEFEND THE STATUE   ]\n \n --How to play-- \n Survive as long as possible until \n all 10 waves are completed. \n \n --Controls-- \n  WASD to move \n  Space or mouse down to shoot \n Mouse pointer to aim ";
 void draw() {
 
   noStroke();
-  background(68, 114, 45);
+  background(80, 159, 79);
   textSize(29);
   fill(0);
   //proof of concept
@@ -79,6 +86,9 @@ void draw() {
       fill(0, 0, 0, 255-(brightness-555));
     rect(400, 400, 800, 800);
   } else {
+    fill(10);
+    rect(400, 530, 700, 5);
+
     for  (int i = 0; i < buttons.length; i+=1) {
       buttons[i].display();
       difficultyMode = buttons[i].difficulty;
@@ -133,20 +143,83 @@ void draw() {
     pushMatrix();
     translate(-1*ShakeOffset.x, -1*ShakeOffset.y);
 
+    for  (int i = 0; i < foliage.length; i+=1) {
+      foliage[i].display();
+    }
+
     delay += 1;
     zombieDelay += 1;
 
-    if (zombieDelay >= zombieSetDelay) {
-      zombieDelay = 0;
-      zombie.add(new Zombie(int(random(1, 4))));
-      //
-
-      //println("poop");
+    if (zombieCount >= 1) {
+      if (wave == 1) {
+        if (zombieDelay >= zombieSetDelay) {
+          zombieDelay = 0;
+          zombie.add(new Zombie(int(random(1, 3))));
+        }
+      }
+      if (wave == 2) {
+        if (zombieDelay >= zombieSetDelay) {
+          zombieDelay = 0;
+          zombie.add(new Zombie(int(random(1, 4))));
+        }
+      }
+      if (wave == 3) {
+        if (zombieDelay >= zombieSetDelay) {
+          zombieDelay = 0;
+          zombie.add(new Zombie(int(random(1, 4))));
+        }
+      }
+      if (wave == 4) {
+        if (zombieDelay >= zombieSetDelay) {
+          zombieDelay = 0;
+          zombie.add(new Zombie(int(random(1, 4))));
+        }
+      }
+      if (wave == 5) {
+        if (zombieDelay >= zombieSetDelay) {
+          zombieDelay = 0;
+          zombie.add(new Zombie(int(random(1, 4))));
+        }
+      }
+      if (wave == 6) {
+        if (zombieDelay >= zombieSetDelay) {
+          zombieDelay = 0;
+          zombie.add(new Zombie(int(random(1, 4))));
+        }
+      }
+      if (wave == 7) {
+        if (zombieDelay >= zombieSetDelay) {
+          zombieDelay = 0;
+          zombie.add(new Zombie(int(random(1, 4))));
+        }
+      }
+      if (wave == 8) {
+        if (zombieDelay >= zombieSetDelay) {
+          zombieDelay = 0;
+          zombie.add(new Zombie(int(random(1, 4))));
+        }
+      }
+      if (wave == 9) {
+        if (zombieDelay >= zombieSetDelay) {
+          zombieDelay = 0;
+          zombie.add(new Zombie(int(random(1, 4))));
+        }
+      }
+      if (wave == 10) {
+        if (zombieDelay >= zombieSetDelay) {
+          zombieDelay = 0;
+          zombie.add(new Zombie(int(random(1, 4))));
+        }
+      }
     }
-
-
+    if (zombieCount <= 0) {
+      wave += 1;
+      zombieCount = 100 + wave*10;
+    }
+    
+//this is where you shoot
     if (keySpace == true || mousePressed) {
-      if (delay >= 2) {
+      if (delay >= 5) {
 
         damage = 1;
         recoil += 5;
@@ -182,13 +255,11 @@ void draw() {
     rectMode(CENTER);
     for  (int i = 0; i < borders.length; i+=1) {
       //add stuff
-      println(i);
-            borders[i].display();
+      borders[i].display();
 
       if (borders[i].Borders.intersects(PlayerHitbox)) {
         PlayerVol.sub(PlayerVol);
       }
-
     }
 
 
@@ -228,6 +299,7 @@ void draw() {
           line (mouseX+10, mouseY+10, mouseX+20, mouseY+20);
           if (z.HP <= 0) {
             println("dead");
+            zombieCount -= 1;
             cameraShake += 10;
 
             zombie.remove(d);
@@ -269,17 +341,6 @@ void draw() {
     rect(mouseX, mouseY +15 + recoil*3, 2, 30);
     rect(mouseX, mouseY +10 + recoil*3, 10, 2);
 
-    textSize(15);
-    fill(0);
-    rectMode(CORNER);
-
-    text ("Points: "+points+
-      "               Money: "+money +
-      "               Statue HP: " +statueHP+
-      "               Wave: "+wave,
-      100, 750, 600, 200);
-
-    rectMode(CENTER);
 
 
 
@@ -297,7 +358,7 @@ void draw() {
       //reset stuff
       gamePlay = false;
       brightness = 0;
-      print(difficultyMode);
+      //print(difficultyMode);
       statueHP =100;
       difficultyMode = 0;
 
@@ -310,12 +371,30 @@ void draw() {
       textPos = new PVector(350, 200);
       text = "";
     }
-  }
-  rectMode(CORNER);
-  fill(0);
-  textSize(40);
 
-  text(text, textPos.x, textPos.y, 500, 300);
+
+    fill(0, 0, 0, 100);
+    rect(400, 800, 1000, 100);
+
+    textSize(15);
+    fill(255);
+    rectMode(CORNER);
+
+    text ("Points: "+points+
+      "               Money: "+money +
+      "               Statue HP: " +statueHP+
+      "               Wave: "+wave,
+      100, 770, 600, 200);
+
+    rectMode(CENTER);
+  }
+
+  rectMode(CORNER);
+  fill(255, 255, 255, 255-brightness);
+  textSize(40);
+  textAlign(CENTER);
+  text(text, textPos.x, textPos.y, 700, 900);
+  textAlign(CORNER);
   rectMode(CENTER);
   fill(255);
   ellipse(mouseX, mouseY, 5, 5);

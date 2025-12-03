@@ -19,7 +19,7 @@ class Start_menu_buttons {
         if (mousePressed) {
           brightness1 = 200;
           difficulty = offset/250 +1;
-          print(difficulty);
+          //print(difficulty);
           for  (int i = 0; i < borders.length; i+=1) {
             //add stuff
             borders[i].diff(difficulty);
