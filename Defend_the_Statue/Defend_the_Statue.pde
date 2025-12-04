@@ -455,6 +455,8 @@ void draw() {
       textPos = new PVector (50, 20);
 
       CenterPos = new PVector (0, 0);
+      text= "[   DEFEND THE STATUE   ]\n \n --How to play-- \n Survive as long as possible until \n all 10 waves are completed. \n \n --Controls-- \n  WASD to move \n  Space or mouse down to shoot \n Mouse pointer to aim \n\nHighscore: "+highscore+"\n\n\n\nEASY                    MEDIUM                     HARD";
+
       if (wave == 11) {
         //textPos = new PVector (50, 20);
 
@@ -466,7 +468,6 @@ void draw() {
       wave = 0;
       //sets the text
       println("Game over man... GAME OVER");
-      text= "[   DEFEND THE STATUE   ]\n \n --How to play-- \n Survive as long as possible until \n all 10 waves are completed. \n \n --Controls-- \n  WASD to move \n  Space or mouse down to shoot \n Mouse pointer to aim \n\nHighscore: "+highscore+"\n\n\n\nEASY                    MEDIUM                     HARD";
     }
 
     fill(0, 0, 0, 100);
