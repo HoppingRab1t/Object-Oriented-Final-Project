@@ -121,8 +121,8 @@ class Zombie {
       colour = new PVector(0, 0, 0);
       Size =new PVector(80, 80);
     }
-    //speed increases the harder the difficulty to make things harder C:<
-    speed += difficultyMode/2;
+    //speed increases the harder the difficulty to make things harder C:< not
+    //speed += difficultyMode/2;
   }
 
 

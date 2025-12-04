@@ -70,7 +70,7 @@ int brightness = 0;
 
 // setting up the variables for the text
 PVector textPos = new PVector (50, 20);
-String text= "[   DEFEND THE STATUE   ]\n \n --How to play-- \n Survive as long as possible until \n all 10 waves are completed. \n \n --Controls-- \n  WASD to move \n  Space or mouse down to shoot \n Mouse pointer to aim \n\n\n\n EASY                 MEDIUM                  HARD";
+String     text= "[   DEFEND THE STATUE   ]\n \n --How to play-- \n Survive as long as possible until \n all 10 waves are completed. \n \n --Controls-- \n  WASD to move \n  Space or mouse down to shoot \n Mouse pointer to aim \n\nHighscore: "+highscore+"\n\n\n\nEASY                    MEDIUM                     HARD";
 
 //this is just for the gun to display
 float ratios;
@@ -416,16 +416,17 @@ void draw() {
     rect(mouseX, mouseY +15 + recoil*3, 2, 30);
     rect(mouseX, mouseY +10 + recoil*3, 10, 2);
 
-    //low hp indicator
-    if (statueHP <= 20 ) {
-      textPos = new PVector(350, 200);
-      text = "LOW HP";
-    } else {
-      textPos = new PVector(350, 200);
-      if (!(wave == 11)) {
-        text = "";
-      }
-    }
+    //low hp indicator NOT FINISHED
+    //if (statueHP <= 20 ) {
+
+    //  textPos = new PVector(350, 200);
+    //  text = "LOW HP";
+    //} else {
+    //  textPos = new PVector(350, 200);
+    //  if (!(wave == 11)) {
+    //    text = "";
+    //  }
+    //}
 
     if (statueHP <= 0 || wave == 11) {
 
@@ -440,7 +441,11 @@ void draw() {
 
       //reset stats
       gamePlay = false;
-
+      
+      if (highscore < points) {
+        highscore = points;
+      }
+      
       brightness = 0;
       statueHP =100;
       difficultyMode = 0;
@@ -452,17 +457,16 @@ void draw() {
       CenterPos = new PVector (0, 0);
       if (wave == 11) {
         //textPos = new PVector (50, 20);
-        if (highscore < points) {
-          highscore = points;
-        }
+
         textPos = new PVector (50, 200);
         //win screen
         text  = "!!! YOU WIN !!! \n YIPPEEEEE\nPoints: \n"+points +"Highscore: " + highscore;
       }
+
       wave = 0;
       //sets the text
       println("Game over man... GAME OVER");
-      text= "[   DEFEND THE STATUE   ]\n \n --How to play-- \n Survive as long as possible until \n all 10 waves are completed. \n \n --Controls-- \n  WASD to move \n  Space or mouse down to shoot \n Mouse pointer to aim \n\n\n\n EASY                 MEDIUM                  HARD";
+      text= "[   DEFEND THE STATUE   ]\n \n --How to play-- \n Survive as long as possible until \n all 10 waves are completed. \n \n --Controls-- \n  WASD to move \n  Space or mouse down to shoot \n Mouse pointer to aim \n\nHighscore: "+highscore+"\n\n\n\nEASY                    MEDIUM                     HARD";
     }
 
     fill(0, 0, 0, 100);
@@ -490,7 +494,7 @@ void draw() {
   //outside the running game
   rectMode(CORNER);
   fill(255, 255, 255, 255-brightness);
-  textSize(40);
+  textSize(35);
   textAlign(CENTER);
 
   text(text, textPos.x, textPos.y, 700, 900);
